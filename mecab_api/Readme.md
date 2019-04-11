@@ -3,7 +3,7 @@
 - notebookで実施すること
   - MeCabをinstallする
   - [辞書]ipadicをinstallする
-  - Neologdをinstallする（軽量ver）
+  - [辞書]Neologdをinstallする（軽量ver）
   - 稼働確認し、Pythonで動かすためのmecab-python3をinstallする（制約あり）
   - moduleをzip圧縮する
 
