@@ -1,6 +1,7 @@
 import glob
 import os
 import random
+import subprocess
 
 import numpy as np
 from keras import layers, models, optimizers
@@ -14,27 +15,46 @@ from utils.callbacks import Statistics
 EPOCHS = int(os.environ.get('EPOCHS', 20))
 BATCH_SIZE = int(os.environ.get('BATCH_SIZE', 128))
 RANDOM_SEED = int(os.environ.get('RANDOM_SEED', 106201324))
+
+TRAINING_JOB_DEFINITION_NAME = os.environ['TRAINING_JOB_DEFINITION_NAME']
 ABEJA_TRAINING_RESULT_DIR = os.environ.get('ABEJA_TRAINING_RESULT_DIR', '.')
+ABEJA_STORAGE_DIR_PATH = os.environ.get('ABEJA_STORAGE_DIR_PATH', '.')
+
 IMAGE_SIZE = 48
-DATASET_DIR = "/home/data/hiragana73/"
-DATASET_CACHE = "/home/data/hiragana73.cache"
+DATASET_DOWNLOAD_DIR = '/home/data'
+DATASET_CACHE_DIR = os.path.join(ABEJA_STORAGE_DIR_PATH,
+                                 'cache', TRAINING_JOB_DEFINITION_NAME)
+DATASET_CACHE = os.path.join(DATASET_CACHE_DIR, 'hiragana73.cache.npz')
 
 
-def load_dataset(path):
+def load_dataset():
     try:
         with np.load(DATASET_CACHE) as data:
             return data['X'], data['Y']
     except IOError:
-        print('No cached dataset found.')
+        print(f'No cached dataset found at {DATASET_CACHE}')
 
+    # download
+    zip_file = os.path.join(DATASET_DOWNLOAD_DIR, 'hiragana73.zip')
+    if not os.path.exists(zip_file):
+        subprocess.run(['wget', 'http://lab.ndl.go.jp/dataset/hiragana73.zip',
+                        '-P', DATASET_DOWNLOAD_DIR], check=True)
+        subprocess.run(['unzip', '-o', '-q',
+                        zip_file,
+                        '-d', DATASET_DOWNLOAD_DIR], check=True)
+
+    # Preprocessing
+    path = os.path.join(DATASET_DOWNLOAD_DIR, 'hiragana73')
     folder = os.listdir(path)
+    # -- Sort paths to convert its name to index
+    folder.sort()
 
     X = []
     Y = []
     for index, name in tqdm(enumerate(folder), total=len(folder)):
 
         # フォルダの一覧をリストとして取得する
-        dir = path + name
+        dir = os.path.join(path, name)
         files = glob.glob(dir + "/*.png")
 
         for i, file in enumerate(files):
@@ -44,9 +64,11 @@ def load_dataset(path):
             image = image.resize((IMAGE_SIZE, IMAGE_SIZE))
             data = np.asarray(image)
             X.append(data)
-            Y.append(name)
+            Y.append(index)
 
     X, Y = np.array(X), np.array(Y)
+
+    os.makedirs(DATASET_CACHE_DIR, exist_ok=True)
     np.savez(DATASET_CACHE, X=X, Y=Y)
     return X, Y
 
@@ -77,7 +99,7 @@ def build_model():
 def handler(context):
     print('Preprocessing images...')
 
-    X, Y = load_dataset(DATASET_DIR)
+    X, Y = load_dataset()
 
     # 学習とテストで 8:2 のデータ割合に分ける
     X_train, X_test, Y_train, Y_test = train_test_split(
