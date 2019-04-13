@@ -1,0 +1,7 @@
+name: hiragana-classification
+handler: train:handler
+image: abeja-inc/all-gpu:18.10
+params:
+  EPOCHS: "20"
+  BATCH_SIZE: "128"
+  RANDOM_SEED: "106201324"
