@@ -15,6 +15,7 @@ from utils.callbacks import Statistics
 EPOCHS = int(os.environ.get('EPOCHS', 20))
 BATCH_SIZE = int(os.environ.get('BATCH_SIZE', 128))
 RANDOM_SEED = int(os.environ.get('RANDOM_SEED', 106201324))
+USE_DATASET_CACHE = bool(int(os.environ.get('USE_DATASET_CACHE', 1)))
 
 TRAINING_JOB_DEFINITION_NAME = os.environ['TRAINING_JOB_DEFINITION_NAME']
 ABEJA_TRAINING_RESULT_DIR = os.environ.get('ABEJA_TRAINING_RESULT_DIR', '.')
@@ -29,8 +30,9 @@ DATASET_CACHE = os.path.join(DATASET_CACHE_DIR, 'hiragana73.cache.npz')
 
 def load_dataset():
     try:
-        with np.load(DATASET_CACHE) as data:
-            return data['X'], data['Y']
+        if USE_DATASET_CACHE:
+            with np.load(DATASET_CACHE) as data:
+                return data['X'], data['Y']
     except IOError:
         print(f'No cached dataset found at {DATASET_CACHE}')
 
@@ -68,8 +70,9 @@ def load_dataset():
 
     X, Y = np.array(X), np.array(Y)
 
-    os.makedirs(DATASET_CACHE_DIR, exist_ok=True)
-    np.savez(DATASET_CACHE, X=X, Y=Y)
+    if USE_DATASET_CACHE:
+        os.makedirs(DATASET_CACHE_DIR, exist_ok=True)
+        np.savez(DATASET_CACHE, X=X, Y=Y)
     return X, Y
 
 
