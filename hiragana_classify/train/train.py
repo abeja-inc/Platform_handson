@@ -1,8 +1,5 @@
-import glob
 from os import environ
 from pathlib import Path
-import os
-import random
 import subprocess
 
 import numpy as np
@@ -134,8 +131,8 @@ def handler(context):
     Y_train = np_utils.to_categorical(Y_train, 73)
     Y_test = np_utils.to_categorical(Y_test, 73)
 
-    log_path = os.path.join(ABEJA_TRAINING_RESULT_DIR, 'logs')
-    tensorboard = TensorBoard(log_dir=log_path, histogram_freq=0,
+    log_path = ABEJA_TRAINING_RESULT_DIR / 'logs'
+    tensorboard = TensorBoard(log_dir=str(log_path), histogram_freq=0,
                               write_graph=True, write_images=False)
 
     model = build_model()
