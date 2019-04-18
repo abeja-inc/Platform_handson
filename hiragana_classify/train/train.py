@@ -1,4 +1,6 @@
 import glob
+from os import environ
+from pathlib import Path
 import os
 import random
 import subprocess
@@ -10,44 +12,50 @@ from keras.utils import np_utils
 from PIL import Image
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
-from utils.callbacks import Statistics
+from abeja.contrib.keras.callbacks import Statistics
 
-EPOCHS = int(os.environ.get('EPOCHS', 20))
-BATCH_SIZE = int(os.environ.get('BATCH_SIZE', 128))
-RANDOM_SEED = int(os.environ.get('RANDOM_SEED', 106201324))
-USE_DATASET_CACHE = bool(int(os.environ.get('USE_DATASET_CACHE', 1)))
+TRAINING_JOB_DEFINITION_NAME = environ['TRAINING_JOB_DEFINITION_NAME']
+EPOCHS = int(environ.get('EPOCHS', 20))
+BATCH_SIZE = int(environ.get('BATCH_SIZE', 128))
+IMAGE_SIZE = int(environ.get('IMAGE_SIZE', 48))
+RANDOM_SEED = int(environ.get('RANDOM_SEED', 106201324))
+USE_DATASET_CACHE = bool(int(environ.get('USE_DATASET_CACHE', 1)))
 
-TRAINING_JOB_DEFINITION_NAME = os.environ['TRAINING_JOB_DEFINITION_NAME']
-ABEJA_TRAINING_RESULT_DIR = os.environ.get('ABEJA_TRAINING_RESULT_DIR', '.')
-ABEJA_STORAGE_DIR_PATH = os.environ.get('ABEJA_STORAGE_DIR_PATH', '.')
 
-IMAGE_SIZE = 48
-DATASET_DOWNLOAD_DIR = '/home/data'
-DATASET_CACHE_DIR = os.path.join(ABEJA_STORAGE_DIR_PATH,
-                                 'cache', TRAINING_JOB_DEFINITION_NAME)
-DATASET_CACHE = os.path.join(DATASET_CACHE_DIR, 'hiragana73.cache.npz')
+ABEJA_TRAINING_RESULT_DIR = Path(environ.get('ABEJA_TRAINING_RESULT_DIR', '.'))
+ABEJA_STORAGE_DIR_PATH = Path(environ.get('ABEJA_STORAGE_DIR_PATH', '.'))
+
+
+DATASET_CACHE_ROOT = ABEJA_STORAGE_DIR_PATH / \
+    'cache' / TRAINING_JOB_DEFINITION_NAME
+DATASET_EXTRACT_DIR = Path('/home/data')
+DATASET_CACHE_FILE = DATASET_CACHE_ROOT / 'hiragana73.cache.npz'
 
 
 def load_dataset():
     try:
         if USE_DATASET_CACHE:
-            with np.load(DATASET_CACHE) as data:
+            with np.load(DATASET_CACHE_FILE) as data:
                 return data['X'], data['Y']
     except IOError:
-        print(f'No cached dataset found at {DATASET_CACHE}')
+        print(f'No cached dataset found at {DATASET_CACHE_FILE}')
 
     # download
-    zip_file = os.path.join(DATASET_DOWNLOAD_DIR, 'hiragana73.zip')
-    if not os.path.exists(zip_file):
+    zip_file = DATASET_CACHE_ROOT / 'hiragana73.zip'
+    dist_path = DATASET_EXTRACT_DIR / 'hiragana73'
+
+    if not zip_file.exists():
         subprocess.run(['wget', 'http://lab.ndl.go.jp/dataset/hiragana73.zip',
-                        '-P', DATASET_DOWNLOAD_DIR], check=True)
+                        '-P', DATASET_CACHE_ROOT], check=True)
+
+    if not dist_path.exists():
         subprocess.run(['unzip', '-o', '-q',
                         zip_file,
-                        '-d', DATASET_DOWNLOAD_DIR], check=True)
+                        '-d', DATASET_EXTRACT_DIR], check=True)
 
     # Preprocessing
-    path = os.path.join(DATASET_DOWNLOAD_DIR, 'hiragana73')
-    folder = os.listdir(path)
+    folder = list(dist_path.iterdir())
+
     # -- Sort paths to convert its name to index
     folder.sort()
 
@@ -56,13 +64,13 @@ def load_dataset():
     for index, name in tqdm(enumerate(folder), total=len(folder)):
 
         # フォルダの一覧をリストとして取得する
-        dir = os.path.join(path, name)
-        files = glob.glob(dir + "/*.png")
+        dir = dist_path / name
+        files = dir.glob("*.png")
 
         for i, file in enumerate(files):
             image = Image.open(file)
             image = image.convert("RGB")
-            #image = image.convert('L')
+            # image = image.convert('L')
             image = image.resize((IMAGE_SIZE, IMAGE_SIZE))
             data = np.asarray(image)
             X.append(data)
@@ -71,8 +79,9 @@ def load_dataset():
     X, Y = np.array(X), np.array(Y)
 
     if USE_DATASET_CACHE:
-        os.makedirs(DATASET_CACHE_DIR, exist_ok=True)
-        np.savez(DATASET_CACHE, X=X, Y=Y)
+        DATASET_CACHE_ROOT.mkdir(parents=True, exist_ok=True)
+        np.savez(DATASET_CACHE_FILE, X=X, Y=Y)
+
     return X, Y
 
 
@@ -146,8 +155,8 @@ def handler(context):
     print('Test loss:', score[0])
     print('Test accuracy:', score[1])
 
-    model.save(os.path.join(ABEJA_TRAINING_RESULT_DIR,
-                            'hiragana_model.h5'), include_optimizer=False)
+    model.save(str(ABEJA_TRAINING_RESULT_DIR / 'hiragana_model.h5'),
+               include_optimizer=False)
 
 
 if __name__ == '__main__':
