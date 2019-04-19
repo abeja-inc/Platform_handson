@@ -12,6 +12,10 @@ from tqdm import tqdm
 from abeja.contrib.keras.callbacks import Statistics
 
 TRAINING_JOB_DEFINITION_NAME = environ['TRAINING_JOB_DEFINITION_NAME']
+TRAINING_JOB_DEFINITION_VERSION = environ.get(
+    'TRAINING_JOB_DEFINITION_VERSION', 0)
+TRAINING_JOB_ID = environ.get('TRAINING_JOB_ID', 0)
+
 EPOCHS = int(environ.get('EPOCHS', 20))
 BATCH_SIZE = int(environ.get('BATCH_SIZE', 128))
 IMAGE_SIZE = int(environ.get('IMAGE_SIZE', 48))
@@ -24,7 +28,8 @@ ABEJA_STORAGE_DIR_PATH = Path(environ.get('ABEJA_STORAGE_DIR_PATH', '.'))
 
 
 DATASET_CACHE_ROOT = ABEJA_STORAGE_DIR_PATH / \
-    'cache' / TRAINING_JOB_DEFINITION_NAME
+    'cache' / TRAINING_JOB_DEFINITION_NAME / \
+    str(TRAINING_JOB_DEFINITION_VERSION)
 DATASET_EXTRACT_DIR = Path('/home/data')
 DATASET_CACHE_FILE = DATASET_CACHE_ROOT / f'hiragana73.cache-{IMAGE_SIZE}.npz'
 
