@@ -4,7 +4,7 @@
 
 #### 補足
 - [ABEJA PlatformのDeveopperサイト](https://developers.abeja.io/general/)  
-※上記はMacOS or Linux上で動作保証となります
+※上記はMacOS or Linux上で動作保証済みとなります
 
 #### コマンドのインストールまわり
 https://developers.abeja.io/cli/overview/  
