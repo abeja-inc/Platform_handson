@@ -16,6 +16,7 @@ https://developers.abeja.io/sdk/
   - コマンドの実施 (下準備)
     - ```sudo apt-get update```
     - ```sudo apt-get install python3-pip```
+    - ```curl -s https://packagecloud.io/install/repositories/abeja/platform-public/script.python.sh | bash```
     - ```pip3 install abejacli```
     - ```pip3 install abeja-sdk```
 ![説明](https://user-images.githubusercontent.com/17213216/56480165-ccf5c480-64f3-11e9-8320-df1e5922176e.png)
