@@ -1,4 +1,5 @@
 ## ハンズオン初級
+- 資料：https://drive.google.com/file/d/194uf7E1sHjZjlhbkSEKMtX8fWt6Ko7OL/view?usp=sharing
 - 構想としてはCNNのネットワークを簡単に説明
 - PlatformのNotebookを活用して、ソースを実行モデルを簡単に作る
 - そのモデルを組み込んで、HTTPサーバとしてリクエストを投げるところまで
