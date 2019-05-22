@@ -20,7 +20,7 @@ ABEJA_TRAINING_RESULT_DIR = os.environ.get('ABEJA_TRAINING_RESULT_DIR', '.')
 epochs = int(os.environ.get('NUM_EPOCHS', 1))
 c = float(os.environ.get('C', 1))
 
-# define datalake channel_id and file_id
+# define datalake channel_id
 channel_id = os.environ.get('CHANNEL_ID', 'XXXXXXXXXX')
 
 
