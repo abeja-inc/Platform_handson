@@ -2,7 +2,7 @@ ABEJA Platform sample code for table data
 ===
 
 ## Description
-### train
+### Train
 - use the [Iris Dataset](https://scikit-learn.org/stable/auto_examples/datasets/plot_iris_dataset.html) in CSV format
 - load the latest file in ABEJA Platform DataLake channel
 - train a Logistic Regression model in scikit-learn
