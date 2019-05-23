@@ -20,7 +20,7 @@ ABEJA_TRAINING_RESULT_DIR = os.environ.get('ABEJA_TRAINING_RESULT_DIR', '.')
 epochs = int(os.environ.get('NUM_EPOCHS', 1))
 c = float(os.environ.get('C', 1))
 
-# define datalake channel_id
+# define datalake channel_id and file_id
 channel_id = os.environ.get('CHANNEL_ID', 'XXXXXXXXXX')
 
 
@@ -28,21 +28,12 @@ def load_latest_file_from_datalake(channel_id):
     datalake_client = DatalakeClient()
     channel = datalake_client.get_channel(channel_id)
 
-    # list all file objects
-    files = [f for f in channel.list_files()]
-
-    # sort file objects by uploaded datetime
-    files_sorted_by_uploaded_time = sorted(files, key=lambda files: files.uploaded_at)
-
-    # select the latest file object
-    latest_file = files_sorted_by_uploaded_time[-1]
-
-    # get a file path
-    latest_file_path = latest_file.download_url
-
-    # print the uploaded datetime of the selected file object
-    latest_file_path_datetime = latest_file.uploaded_at
-    print('load file uploaded at {} (UTC time).'.format(latest_file_path_datetime))
+    # load latest file path
+    for f in channel.list_files(sort='-uploaded_at'):
+        latest_file_path = f.download_url
+        latest_file_datetime = f.uploaded_at
+        print('load file uploaded at {} (UTC time).'.format(latest_file_datetime))
+        break
 
     return latest_file_path
 
