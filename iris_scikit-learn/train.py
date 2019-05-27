@@ -41,11 +41,10 @@ def load_latest_file_from_datalake(channel_id):
 def handler(context):
     """
     the following csv file should be stored in the datalake channel.
-
-     sepal_lenght (cm)| sepal_width (cm)| petal_lenght (cm)| petal_width (cm)|  target  |
-    ------------------|-----------------|------------------|-----------------|----------|
-         float        |     float       |     float        |     float       |    int   |
-
+    ---
+    sepal_lenght (cm), sepal_width (cm), petal_lenght (cm), petal_width (cm), target
+    float, float, float, float, int
+    ---
     """
     iris = datasets.load_iris()
     file_path = load_latest_file_from_datalake(channel_id)
