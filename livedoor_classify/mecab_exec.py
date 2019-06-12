@@ -60,7 +60,7 @@ if __name__ == '__main__':
     cat_f_list.sort()
 
     #setting ignore file or folder
-    ignore_list = ["LICENSE.txt","output","CHANGES.txt", "README.txt"]
+    ignore_list = ["LICENSE.txt","output","CHANGES.txt", "README.txt","result_mecab"]
 
     # Get folder name
     for cat_f_name in cat_f_list:
@@ -71,13 +71,14 @@ if __name__ == '__main__':
             folder_list = os.listdir(target_f_path)
 
             di ={}
+            result_text = ""
+            out_file_path = os.path.join(path,"result_mecab",str(cat_f_name)+".txt")
 
             for file_name in folder_list:
                 if file_name in ignore_list:
                     pass
                 else:
                     in_file_path = os.path.join(target_f_path, file_name)
-                    out_file_path = os.path.join(path,"result_mecab",file_name)
                     with open(in_file_path,"r") as f:
                         lines = f.readlines()
 
@@ -89,7 +90,9 @@ if __name__ == '__main__':
                         auth = (user_id,personal_access_token)
                         response = requests.post(mecab_url, text,headers={'Content-Type': 'application/json; charset=UTF-8'}, auth=auth)
 
-                        with open(out_file_path, "w") as f:
-                            pprint.pprint(response.json(), stream=f)
+                        result_text = result_text + response.json()
 
-                        upload_datalake(out_file_path)
+            with open(out_file_path, "w") as f:
+                f.write(result_text)
+
+            upload_datalake(out_file_path)
