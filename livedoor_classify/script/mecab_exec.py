@@ -2,15 +2,17 @@ import requests
 import json
 import pprint
 import os, time
-import credentials
 from abeja.datalake import Client as DatalakeClient
 from abeja.datalake import APIClient as APIDatalakeClient
 
-user_id = credentials.user_id
-personal_access_token = credentials.personal_access_token
-organization_id = credentials.organization_id
-channel_id = credentials.channel_id
-mecab_url = credentials.mecab_url
+f = open("credential.json","r")
+credential = json.load(f)
+
+user_id = credential["abeja-platform-user"]
+personal_access_token = credential["personal-access-token"]
+organization_id = credential["organization_id"]
+channel_id = credential["channel_id"]
+mecab_url = credential["mecab_url"]
 
 credential = {
     'user_id': user_id,
@@ -59,6 +61,7 @@ if __name__ == '__main__':
     cat_f_list = os.listdir(path)
     cat_f_list.sort()
 
+    print(cat_f_list)
     #setting ignore file or folder
     ignore_list = ["LICENSE.txt","output","CHANGES.txt", "README.txt","result_mecab"]
 
@@ -72,7 +75,10 @@ if __name__ == '__main__':
 
             di ={}
             result_text = ""
-            out_file_path = os.path.join(path,"result_mecab",str(cat_f_name)+".txt")
+            out_file_path = os.path.join(".","result_mecab",str(cat_f_name)+".txt")
+
+            if not os.path.exists("result_mecab"):
+                    os.mkdir("result_mecab")
 
             for file_name in folder_list:
                 if file_name in ignore_list:
@@ -83,8 +89,13 @@ if __name__ == '__main__':
                         lines = f.readlines()
 
                         # ignore line:1&2(Not have information)
-                        di= { index:line for index, line in enumerate(lines) if line !="\n" and index!=0 and index!=1}
+                        #di= { index:line for index, line in enumerate(lines) if line !="\n" and index!=0 and index!=1}
 
+                        doc = ""
+                        for index, line in enumerate(lines):
+                            if index != 0 and index != 1:
+                                doc += line.rstrip("\n").lstrip("　")
+                        di = {"text":doc}
                         text = json.dumps(di)
 
                         auth = (user_id,personal_access_token)
