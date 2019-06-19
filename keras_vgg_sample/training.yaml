@@ -1,0 +1,11 @@
+name: demo-local
+handler: train_vgg:handler
+image: abeja-inc/minimal:0.1.0
+# params:
+#   param1: value1
+#   parma2: value2
+# datasets:
+#   dataset_name1: value1
+#   dataset_name2: value2
+# ignores:
+#   - .gitignore
