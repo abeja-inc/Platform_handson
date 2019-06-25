@@ -21,6 +21,7 @@ abeja config show --format json > ./scripts/credential.json
 ```
 
 #### アノテーションデータ紐付け
+- {OrganizationID} と {ChannelID}は適宜、置き換える
 ```
 python ./scripts/import_dataset_from_datalake.py \
           -o {OrganizationID} \
@@ -32,7 +33,7 @@ python ./scripts/import_dataset_from_datalake.py \
 python ./scripts/import_dataset_from_datalake.py \
           -o {OrganizationID} \
           -c {ChannelID} \
-          -d BCCD_dataset_trainval \
+          -d BCCD_dataset_test \
           --split test \
           --max_workers 4
 ```
