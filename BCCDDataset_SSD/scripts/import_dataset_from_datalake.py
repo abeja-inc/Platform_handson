@@ -6,7 +6,6 @@ from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
 
-from abejacli.config import Config as cnf
 from abeja.datalake import Client as DatalakeClient
 from abeja.datasets import Client as DatasetClient
 import bccd_bbox_dataset
