@@ -16,6 +16,7 @@ abeja datalake upload --channel_id XXXXX --recursive ./BCCDDataset_SSD/BCCD/JPEG
 ```
 #### クレデンシャルデータの抜き出し
 ```
+cd ./BCCDDataset_SSD
 abeja config show --format json > ./scripts/credential.json
 ```
 
