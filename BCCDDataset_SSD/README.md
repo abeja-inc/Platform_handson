@@ -12,7 +12,7 @@ Copyright (c) 2017 shenggan
 #### アップロード
 ```
 abeja datalake create-channel --name "BCCD_CHANNEL" --description "BCCD data"
-abeja datalake upload --channel_id XXXXX --recursive ./BCCD_Dataset/BCCD/JPEGImages/
+abeja datalake upload --channel_id XXXXX --recursive ./BCCDDataset_SSD/BCCD/JPEGImages/
 ```
 #### クレデンシャルデータの抜き出し
 ```
