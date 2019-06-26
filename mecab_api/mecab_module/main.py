@@ -9,13 +9,11 @@ def mecab_result(dic_data):
 
     for x in dic_data:
         word = m.parse(dic_data[x])
-        sentence = sentence + "\n" + str(word)
+        sentence = sentence + str(word)
 
-    result = {"result":sentence}
-    return result
+    return sentence
     
 def handler(iter, context):
     for json_file in iter:
         yield mecab_result(json_file)
-
 
