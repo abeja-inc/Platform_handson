@@ -1,0 +1,26 @@
+{
+  "name": "BCCD", 
+  "type": "detection", 
+  "props": {
+    "categories": [
+      {
+        "labels": [
+          {
+            "label_id": 0, 
+            "label": "rbc"
+          }, 
+          {
+            "label_id": 1, 
+            "label": "wbc"
+          }, 
+          {
+            "label_id": 2, 
+            "label": "platelets"
+          }
+        ],
+        "category_id": 0,
+        "name": "BCCD"
+      }
+    ]
+  }
+}
