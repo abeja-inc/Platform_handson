@@ -1,31 +1,72 @@
-# Platform_handson
+# Platform_handson (In English)
 
-### ハンズオンコンテンツを管理するためのレポジトリ
+### Repository for managing hands-on content
+This repository manages hands-on content for using ABEJA Platform.   
 
-#### 補足
-- [ABEJA PlatformのDeveopperサイト](https://developers.abeja.io/general/)  
-※上記はMacOS or Linux上で動作保証済みとなります
+#### Document
+- [ABEJA Platform Developer Site](https://developers.abeja.io/general/)  
 
-#### コマンドのインストールまわり
-https://developers.abeja.io/cli/overview/  
-https://developers.abeja.io/sdk/
+ABEJA Platform CLI or SDK supports MacOS or Linux. Windows is not supported.   
 
-#### (仮)Windowsで ABEJA PLatform CLI や ABEJA SDKを使用する場合
+
+#### Introduction of ABEJA Platform CLI or SDK
+- [ABEJA Platform CLI](https://developers.abeja.io/cli/overview/)
+- [ABEJA Platform SDK](https://developers.abeja.io/sdk/)
+
+#### Appendix
+Using ABEJA PLatform CLI and ABEJA SDK on Windows   
+**※Please take responsibility for your actions**
+
+- Use Windows Subsystem for Linux
+  - Introducing ubuntu on Windows：[Procedure](https://qiita.com/Aruneko/items/c79810b0b015bebf30bb)
+  - How to install ABEJA Platform CLI on Ubuntu：[Procedure](https://forums.abeja.io/t/topic/145)
+  - Run ```abeja configure```
+  - Perform initial settings with reference to the procedure：[Procedure](https://developers.abeja.io/reference/cli/configuration-command/init/)
+
+
+- VirtualBox（Linux virtualization）
+  - Make ubuntu available on Windows：[Procedure](https://qiita.com/miyagaw61/items/b44a89eb636d16de010c)
+  - How to install ABEJA Platform CLI on Ubuntu：[Procedure](https://forums.abeja.io/t/topic/145)
+  - It is recommended to use WSFL. If it is easy because memory allocation and partitioning will occur.
+
+
+- Windows for docker and Cygwin are unverified.
+
+
+---
+
+# Platform_handson (In Japanese)
+
+### ABEJA Platformで利用できるハンズオンコンテンツを管理するリポジトリ
+
+このリポジトリはABEJA Platformを利用するためのハンズオンコンテンツを管理しています。
+
+### ドキュメント
+- [ABEJA Platform Developer Site](https://developers.abeja.io/general/)
+
+※ABEJA Platform CLI・SDKは、MacOS or Linux上で動作保証となります。Windowsについては、動作保証対象外となります。
+
+### ABEJA Platform CLI / SDKの導入
+- [ABEJA Platform CLI](https://developers.abeja.io/cli/overview/)
+- [ABEJA Platform SDK](https://developers.abeja.io/sdk/)
+
+### 補足情報
+#### WindowsでABEJA Platform CLI / SDKを利用したい場合
+
+※サポート対象外となりますため、自己責任でお願いします。
+
 - Windows Subsystem for Linuxを使う
-  - [このqiita記事](https://qiita.com/Aruneko/items/c79810b0b015bebf30bb)に従って、windowsにubuntuをいれる
-  - コマンドの実施 (下準備)
-    - ```sudo apt-get update```
-    - ```sudo apt-get install python3-pip```
-    - ```curl -s https://packagecloud.io/install/repositories/abeja/platform-public/script.python.sh | bash```
-    - ```pip3 install abejacli```
-    - ```pip3 install abeja-sdk```
-![説明](https://user-images.githubusercontent.com/17213216/56480165-ccf5c480-64f3-11e9-8320-df1e5922176e.png)
-    - 一旦コマンドラインの再起動を実施後、```abeja configure```を打鍵してみる（以降の流れは[ここ](https://developers.abeja.io/cli/overview/)の**初期設定**を参考に  
-![説明2](https://user-images.githubusercontent.com/17213216/56480415-f105d580-64f4-11e9-84b9-799f4adc7997.png)
+  - Windowsにubuntuを導入する：[参考手順](https://qiita.com/Aruneko/items/c79810b0b015bebf30bb)
+  - UbuntuにABEJA Platform CLIを導入する方法：[参考手順](https://forums.abeja.io/t/topic/145)
+  - ```abeja configure```を実行
+  - 初期設定を手順を参考に実施：[参考手順](https://developers.abeja.io/reference/cli/configuration-command/init/)
+
 
 - VirtualBoxを使う（Linux仮想化）
-  - [このqiita記事](https://qiita.com/miyagaw61/items/b44a89eb636d16de010c)に従って、windowsでubuntuを使えるようにする
-  - Ubuntuが使えるようになってから、[ここ](https://developers.abeja.io/cli/overview/)の作業を進めるでOK
-  - メモリの割り当てや、パーティションの分割が発生するため、お手軽にやるならWSFL(上記)を使うことを進める（リソースが潤沢ではない場合はなおさら、圧迫する可能性もあるので）
+  - Windowsでubuntuを使えるようにします：[参考手順](https://qiita.com/miyagaw61/items/b44a89eb636d16de010c)
+  - UbuntuにABEJA Platform CLIを導入する：[参考手順](https://forums.abeja.io/t/topic/145)
+  - メモリの割り当てや、パーティションの分割が発生するため、お手軽にやるならWSFLを使うことを推奨
+  　（リソースが潤沢ではない場合は、圧迫する可能性もあるため）
 
-- windows for dockerとかcygwinは未検証
+
+- Windows for dockerやCygwinは未検証となります。
