@@ -1,0 +1,5 @@
+name: xxxxx
+handler: train
+image: abeja-inc/all-gpu:20.02a
+environment:
+    EPOCHS: 20
